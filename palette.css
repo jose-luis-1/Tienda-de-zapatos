@@ -2,30 +2,30 @@
 :root {
   /* Core */
   --color-bg: #F6F2EE;             /* Soft beige background */
-  --color-surface: #FFFFFF;        /* Card surface */
-  --color-surface-2: #F9FAFB;      /* Light surface variant */
-  --color-text: #1F2937;           /* Deep slate (main content text) */
-  --color-muted: #6B7280;          /* Muted gray for descriptions */
-
+    --color-bg: #F6F2EE;             /* Fondo beige suave */
+    --color-surface: #FFFFFF;        /* Superficie de tarjeta */
+    --color-surface-2: #F9FAFB;      /* Variante de superficie clara */
+    --color-text: #1F2937;           /* Gris oscuro (texto principal) */
+    --color-muted: #6B7280;          /* Gris tenue para descripciones */
   /* Elegant accents */
   --color-primary: #3446A4;        /* Deep indigo (main accent) */
-  --color-primary-600: #243678;    /* Darker indigo */
-  --color-accent: #BFA26A;         /* Warm brass / gold accent */
+    --color-primary: #3446A4;        /* Índigo profundo (acento principal) */
+    --color-accent: #BFA26A;         /* Acento cálido bronce/oro */
   --color-accent-600: #9A7C42;     /* Deeper brass */
 
-  /* Status */
-  --color-success: #10B981;        /* green / success */
-  --color-success-600: #0B8B69;
-  --color-danger: #EF4444;         /* red for errors */
+    --color-success: #10B981;        /* verde / éxito */
+    --color-danger: #EF4444;         /* rojo para errores */
+    --color-warning: #F59E0B;       /* ámbar */
+    --color-border: #E5E7EB;         /* color sutil de borde */
   --color-danger-600: #DC2626;
   --color-warning: #F59E0B;       /* amber */
-  --color-warning-600: #D97706;    /* deeper amber */
-  --color-border: #E5E7EB;         /* subtle border color */
-  --color-warning-600: #D97706;
-  --color-border: #E5E7EB;
+    --shadow-rgb: 17, 24, 39;        /* 0 10px 30px rgba(var(--shadow-rgb), .15) */
+    --primary-rgb: 52, 70, 164;      /* RGB de --color-primary */
+    --accent-rgb: 191, 162, 106;     /* RGB de --color-accent */
+    --focus-ring: rgba(52,70,164, 0.1);
 
   /* Misc */
-  --shadow-rgb: 17, 24, 39;        /* 0 10px 30px rgba(var(--shadow-rgb), .15) */
+  /* Opcional: clases utilitarias basadas en la paleta */
   --primary-rgb: 52, 70, 164;      /* --color-primary rgb */
   --accent-rgb: 191, 162, 106;     /* --color-accent rgb */
   --focus-ring: rgba(52,70,164, 0.1);

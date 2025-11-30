@@ -9,15 +9,18 @@ Estructura de archivos
 ----------------------
 - `tienda_zapatos.html` - HTML principal (sin estilos ni lógica inline)
 - `clean-styles.css` - Estilos centralizados (limpios y consolidados)
-- `logic.js` - Lógica JS (renderizado del catálogo, manipulación del carrito, almacenamiento en LocalStorage y validación del número de WhatsApp)
+- `js/core/index.js` - Código core: estado global (App), persistencia, filtros, utilidades y carga de datos.
+- `js/images/index.js` - Módulo de imágenes: uploads (resize), previews, reorder, drag & drop y galería.
+- `js/ui/index.js` - UI: renderizado de catálogo, CRUD de productos, carrito, y listeners.
 
 Cambios principales realizados
 ------------------------------
-- Se separó el código original en 3 archivos: HTML, CSS y JS.
-- Se movieron los `onclick` y `onerror` inline a `logic.js` como listeners y handlers.
-- Se añadió un `PLACEHOLDER_SVG` en `logic.js` para usar cuando las imágenes de producto fallan al cargar.
-- Se añadió la validación del número de WhatsApp y el botón `Enviar por WhatsApp` se habilita/deshabilita acorde a la validez del número y el estado del carrito.
-- Se limpió y consolidó `clean-styles.css`, se añadió fondo con overlay y utilidades CSS.
+- Se separó la lógica original en 3 módulos JS (core, images, ui).
+- Se añadió soporte para múltiples imágenes por producto (uploads y URL), con previews y miniaturas en la vista Admin.
+- Redimensionado automático para imágenes subidas y límite aproximado por imagen (configurable).
+- Drag & drop para reordenar imágenes en el Admin, con soporte para seleccionar la imagen principal (thumbnail).
+- Galería de producto con navegação por flechas, miniaturas, contador y gestos swipe en mobile.
+- Se migró la lógica de `logic.js` a módulos; el archivo original quedó archivado y ya no se carga.
 
 Cómo probar localmente
 ----------------------
@@ -40,5 +43,5 @@ Pruebas rápidas
 Notas y recomendaciones
 -----------------------
 - Si prefieres alojar la imagen de fondo localmente, muévela a una carpeta `assets/` y actualiza `clean-styles.css` con la ruta relativa.
-- Si deseas mejorar la experiencia del usuario (feedback inline en vez de `alert()`), puedo implementar mensajes dentro de las modales.
+- Si deseas mejorar la experiencia del usuario (feedback inline en vez de `alert()`), se usaron toasts. Puedo añadir más UX refinamientos si lo deseas.
 
