@@ -5,10 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let whatsappNumber = '';
     let filters = { gender: 'all', size: 'all' };
 
-    // Placeholder image (SVG) base64 encoded as data URI
+    // Imagen de marcador de posición (SVG) codificada en base64 como URI de datos
     const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22%239ca3af%22%3ESin imagen%3C/text%3E%3C/svg%3E";
 
-    // Helper: save to localStorage
+    // Auxiliar: guardar datos en localStorage
     function saveData() {
         localStorage.setItem('products', JSON.stringify(products));
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (saved) {
             try { filters = JSON.parse(saved); } catch (e) { filters = { gender: 'all', size: 'all' }; }
         }
-        // update UI selects
+        // actualizar selects de la UI
         const fg = document.getElementById('filterGender');
         const fs = document.getElementById('filterSize');
         if (fg) fg.value = filters.gender || 'all';
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         populateSizeFilter();
         renderCatalog();
+        updateActiveFiltersUI();
         updateCartCount();
         updateSendButtonState();
         populateSizeFilter();
@@ -74,8 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const sizeMatch = filters.size === 'all' || (product.sizes && product.sizes.includes(Number(filters.size)));
             return genderMatch && sizeMatch;
         });
+        const resultCountEl = document.getElementById('resultCount');
         if (filtered.length === 0) {
             catalog.innerHTML = '<div class="empty-message">No hay productos que coincidan con los filtros.</div>';
+            if (resultCountEl) resultCountEl.textContent = 'Mostrando 0 productos';
+            updateActiveFiltersUI();
             return;
         }
 
@@ -95,22 +99,60 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </select>
                             </div>
                         ` : ''}
-                        <button class="btn-add-cart" data-id="${product.id}">Agregar al Carrito</button>
+                        <button class="btn-add-cart" data-id="${product.id}" aria-label="Agregar ${product.name} al carrito">Agregar al Carrito</button>
                     </div>
                 </div>
             `).join('');
 
-        // Attach event listeners to new buttons
+        // Adjuntar listeners a los nuevos botones
         document.querySelectorAll('.btn-add-cart').forEach(btn => {
             btn.addEventListener('click', (e) => addToCart(Number(btn.dataset.id), e));
         });
 
-        // Attach error handlers to images to set placeholder on load error
+        // Adjuntar manejadores de error a las imágenes para usar el placeholder si fallan al cargar
         document.querySelectorAll('.product-image').forEach(img => {
             img.addEventListener('error', function() {
-                this.onerror = null; // avoid potential infinite loop
+                this.onerror = null; // evitar bucle infinito
                 this.src = PLACEHOLDER_SVG;
             });
+        });
+        // Actualizar contador de resultados y filtros activos
+        if (resultCountEl) resultCountEl.textContent = `Mostrando ${filtered.length} productos`;
+        updateActiveFiltersUI();
+    }
+
+    function updateActiveFiltersUI() {
+        const container = document.getElementById('activeFilters');
+        if (!container) return;
+        container.innerHTML = '';
+        const badges = [];
+        if (filters.gender && filters.gender !== 'all') badges.push({ text: filters.gender.charAt(0).toUpperCase() + filters.gender.slice(1), key: 'gender' });
+        if (filters.size && filters.size !== 'all') badges.push({ text: 'Talla ' + filters.size, key: 'size' });
+
+        if (badges.length === 0) {
+            container.innerHTML = '<div class="text-muted">Sin filtros</div>';
+            return;
+        }
+
+        badges.forEach(b => {
+            const span = document.createElement('span');
+            span.className = 'badge';
+            span.textContent = b.text;
+            const clear = document.createElement('span');
+            clear.className = 'clear';
+            clear.textContent = '✕';
+            clear.title = 'Eliminar filtro ' + b.key;
+            clear.addEventListener('click', () => {
+                filters[b.key] = 'all';
+                const fg = document.getElementById('filterGender');
+                const fs = document.getElementById('filterSize');
+                if (fg) fg.value = filters.gender;
+                if (fs) fs.value = filters.size;
+                saveFilters();
+                renderCatalog();
+            });
+            span.appendChild(clear);
+            container.appendChild(span);
         });
     }
 
@@ -133,12 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
         saveData();
         updateCartCount();
 
-        // Animación
+        // Animación (confirmación temporal en el botón)
         const previousText = btn.textContent;
         btn.textContent = '✓ Agregado';
         setTimeout(() => {
             btn.textContent = previousText;
         }, 1000);
+        showToast(`${product.name}${selectedSize ? ' (Talla: ' + selectedSize + ')' : ''} agregado al carrito`);
     }
 
     // Actualizar contador del carrito
@@ -148,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSendButtonState();
     }
 
-    // Admin Modal
+    // Modal de administración
     function openAdmin() {
         document.getElementById('whatsappNumber').value = whatsappNumber;
         renderAdminProducts();
@@ -162,15 +205,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveWhatsApp() {
         const input = document.getElementById('whatsappNumber');
         const raw = input.value.trim();
-        const digits = raw.replace(/\D/g, ''); // remove non-digits
+        const digits = raw.replace(/\D/g, ''); // quitar caracteres que no sean dígitos
+        const errorEl = document.getElementById('whatsappError');
         if (!isValidWhatsAppNumber(digits)) {
-            alert('Número de WhatsApp inválido. Debe incluir el código de país y contener al menos 8 dígitos. Ej: 573001234567');
+            if (errorEl) {
+                errorEl.textContent = 'Número inválido. Debe incluir el código de país y tener entre 8 y 15 dígitos. Ej: 573001234567';
+                errorEl.classList.remove('text-success');
+                errorEl.classList.add('text-error');
+            }
             return;
         }
 
         whatsappNumber = digits;
         localStorage.setItem('whatsappNumber', whatsappNumber);
-        alert('Número de WhatsApp guardado correctamente');
+        if (errorEl) { errorEl.textContent = 'Número guardado correctamente'; errorEl.classList.remove('text-error'); errorEl.classList.add('text-success'); }
+        showToast('Número de WhatsApp guardado');
         updateSendButtonState();
     }
 
@@ -194,12 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `).join('');
 
-        // Attach listeners
+        // Adjuntar listeners
         container.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', () => editProduct(Number(btn.dataset.id))));
         container.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', () => deleteProduct(Number(btn.dataset.id))));
     }
 
-    // Product Modal
+    // Modal de producto
     function openProductForm(productId = null) {
         editingProductId = productId;
 
@@ -288,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cart Modal
+    // Modal del carrito
     function openCart() {
         renderCart();
         document.getElementById('cartModal').style.display = 'block';
@@ -323,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class=\"btn-whatsapp\" id=\"sendWhatsAppBtn\">📱 Enviar Pedido por WhatsApp</button>
                 `;
 
-        // Attach remove listeners
+        // Adjuntar listeners de eliminación del carrito
         container.querySelectorAll('.remove-from-cart').forEach(btn => btn.addEventListener('click', () => removeFromCart(Number(btn.dataset.id), btn.dataset.size ? Number(btn.dataset.size) : null)));
         document.getElementById('sendWhatsAppBtn').addEventListener('click', sendToWhatsApp);
         updateSendButtonState();
@@ -344,6 +393,19 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = !(isValidWhatsAppNumber(whatsappNumber) && cart.length > 0);
     }
 
+    // Show a short toast notification
+    function showToast(message, duration = 2000) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.style.display = 'none', 200);
+        }, duration);
+    }
+
     function removeFromCart(productId, size = null) {
         cart = cart.filter(item => {
             if (size === null) return item.id !== productId || item.size !== null; // if size not provided, remove items with no size
@@ -356,12 +418,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function sendToWhatsApp() {
         if (!isValidWhatsAppNumber(whatsappNumber)) {
-            alert('Por favor configura el número de WhatsApp en el panel Admin');
+            showToast('Por favor configura el número de WhatsApp en el panel Admin');
             return;
         }
 
         if (cart.length === 0) {
-            alert('El carrito está vacío');
+            showToast('El carrito está vacío');
             return;
         }
 
@@ -455,6 +517,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveWhatsAppBtn = document.getElementById('saveWhatsAppBtn');
         if (saveWhatsAppBtn) saveWhatsAppBtn.addEventListener('click', saveWhatsApp);
 
+        const whatsappInput = document.getElementById('whatsappNumber');
+        if (whatsappInput) whatsappInput.addEventListener('input', (e) => {
+            const digits = e.target.value.replace(/\D/g, '');
+            const errorEl = document.getElementById('whatsappError');
+            if (!isValidWhatsAppNumber(digits)) {
+                if (errorEl) { errorEl.textContent = 'Número inválido'; errorEl.classList.remove('text-success'); errorEl.classList.add('text-error'); }
+            } else {
+                if (errorEl) { errorEl.textContent = ''; errorEl.classList.remove('text-error'); }
+            }
+        });
+
         const openProductFormBtn = document.getElementById('openProductFormBtn');
         if (openProductFormBtn) openProductFormBtn.addEventListener('click', () => openProductForm());
 
@@ -475,6 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filters.gender = e.target.value;
             saveFilters();
             renderCatalog();
+            updateActiveFiltersUI();
         });
 
         const filterSize = document.getElementById('filterSize');
@@ -482,6 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filters.size = e.target.value;
             saveFilters();
             renderCatalog();
+            updateActiveFiltersUI();
         });
 
         const clearFiltersBtn = document.getElementById('clearFiltersBtn');
@@ -492,6 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (filterSize) filterSize.value = 'all';
             saveFilters();
             renderCatalog();
+            updateActiveFiltersUI();
         });
     }
 
