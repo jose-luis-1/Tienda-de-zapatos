@@ -1,0 +1,38 @@
+
+:root {
+  /* Core */
+  --color-bg: #F6F2EE;             /* Soft beige background */
+  --color-surface: #FFFFFF;        /* Card surface */
+  --color-surface-2: #F9FAFB;      /* Light surface variant */
+  --color-text: #1F2937;           /* Deep slate (main content text) */
+  --color-muted: #6B7280;          /* Muted gray for descriptions */
+
+  /* Elegant accents */
+  --color-primary: #3446A4;        /* Deep indigo (main accent) */
+  --color-primary-600: #243678;    /* Darker indigo */
+  --color-accent: #BFA26A;         /* Warm brass / gold accent */
+  --color-accent-600: #9A7C42;     /* Deeper brass */
+
+  /* Status */
+  --color-success: #10B981;        /* green / success */
+  --color-success-600: #0B8B69;
+  --color-danger: #EF4444;         /* red for errors */
+  --color-danger-600: #DC2626;
+  --color-warning: #F59E0B;       /* amber */
+  --color-warning-600: #D97706;    /* deeper amber */
+  --color-border: #E5E7EB;         /* subtle border color */
+  --color-warning-600: #D97706;
+  --color-border: #E5E7EB;
+
+  /* Misc */
+  --shadow-rgb: 17, 24, 39;        /* 0 10px 30px rgba(var(--shadow-rgb), .15) */
+  --primary-rgb: 52, 70, 164;      /* --color-primary rgb */
+  --accent-rgb: 191, 162, 106;     /* --color-accent rgb */
+  --focus-ring: rgba(52,70,164, 0.1);
+}
+
+/* Opt-in: helper utility classes to use the palette */
+.bg-primary { background-color: var(--color-primary) !important; color: #fff !important; }
+.text-primary { color: var(--color-primary) !important; }
+.text-muted { color: var(--color-muted) !important; }
+.text-accent { color: var(--color-accent) !important; }

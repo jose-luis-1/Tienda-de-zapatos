@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Zapatos</title>
+    <link rel="stylesheet" href="palette.css">
+    <link rel="stylesheet" href="clean-styles.css">
+    </head>
+    <body>
+        <header>
+            <h1>  Calzado a la medida de tu estilo</h1>
+            <div class="header-buttons">
+                <button class="btn-admin" id="openAdminBtn">🔧 Admin</button>
+                <button class="btn-cart" id="openCartBtn">
+                    🛒 Carrito
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-layout container">
+            <aside id="filters" class="sidebar">
+                <h3>Filtros</h3>
+                <div class="form-group">
+                    <label for="filterGender">Género:</label>
+                    <select id="filterGender">
+                        <option value="all">Todos</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="unisex">Unisex</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterSize">Talla:</label>
+                    <select id="filterSize">
+                        <option value="all">Todas</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button id="clearFiltersBtn" class="btn-cancel full-width">Limpiar filtros</button>
+                </div>
+            </aside>
+
+            <main class="catalog-area">
+                <div class="catalog" id="catalog"></div>
+            </main>
+        </div>
+
+    
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2>Panel de Administración</h2>
+            <div class="form-group">
+                <label>Número de WhatsApp (con código de país):</label>
+                <input type="text" id="whatsappNumber" placeholder="Ej: 573001234567">
+                <div id="whatsappError" class="text-muted" aria-live="polite"></div>
+            </div>
+            <button id="saveWhatsAppBtn" class="btn-save full-width mb-30">Guardar WhatsApp</button>
+            
+            <h3 class="mb-20">Productos</h3>
+            <button id="openProductFormBtn" class="btn-save full-width mb-20">➕ Agregar Producto</button>
+            <div id="adminProducts"></div>
+            <button id="closeAdminBtn" class="btn-cancel full-width mt-20">Cerrar</button>
+        </div>
+    </div>
+
+    
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <h2 id="productModalTitle">Agregar Producto</h2>
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input type="text" id="productName">
+            </div>
+            <div class="form-group">
+                <label>Descripción:</label>
+                <textarea id="productDescription"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Precio:</label>
+                <input type="number" id="productPrice" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>URL de la Imagen:</label>
+                <input type="text" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
+            </div>
+            <div class="form-group">
+                <label>Género:</label>
+                <select id="productGender">
+                    <option value="unisex">Unisex</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tallas (separadas por comas, e.g. 38,39,40):</label>
+                <input type="text" id="productSizes" placeholder="38,39,40">
+            </div>
+            <div class="modal-buttons">
+                <button id="cancelProductBtn" class="btn-cancel">Cancelar</button>
+                <button id="saveProductBtn" class="btn-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <h2>🛒 Carrito de Compras</h2>
+            <div id="cartItems"></div>
+            <div class="modal-buttons">
+                <button id="closeCartBtn" class="btn-cancel">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="logic.js" defer></script>
+</body>
+</html>
