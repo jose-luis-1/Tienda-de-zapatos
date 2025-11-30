@@ -1,27 +1,27 @@
-/* clean-styles.css - Clean consolidated stylesheet for Tienda de Zapatos */
-/* Uses variables from palette.css */
+/* clean-styles.css - Hoja de estilos consolidada para Tienda de Zapatos */
+/* Usa variables definidas en palette.css */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; padding: 20px; background: linear-gradient(rgba(var(--primary-rgb),0.12), rgba(var(--accent-rgb),0.04)), url('https://us.123rf.com/450wm/olgaarkhipenko/olgaarkhipenko2201/olgaarkhipenko220100009/184850898-leather-brown-men-s-sneakers-with-white-laces-and-rubber-soles-on-beige-background-flat-lay-top.jpg') center/cover no-repeat; color: var(--color-text); }
 .container { max-width: 1200px; margin: 0 auto; }
 
-/* Header */
+/* Cabecera */
 header { display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--color-surface); border-radius:10px; padding:16px; box-shadow:0 8px 24px rgba(var(--shadow-rgb),0.06); }
 h1 { color:var(--color-primary); font-size:1.6rem; }
 .header-buttons { display:flex; gap:8px; align-items:center; }
 
-/* Layout */
+/* Diseño */
 .main-layout { display:flex; gap:18px; align-items:flex-start; margin-top:18px; }
 .sidebar { width:240px; padding:14px; background:var(--color-surface); border-radius:10px; box-shadow:0 6px 20px rgba(var(--shadow-rgb),0.05); }
 .catalog-area { flex:1; }
 
-/* Sidebar filters */
+/* Filtros (barra lateral) */
 .sidebar h3 { color:var(--color-primary); margin-bottom:10px; }
 .form-group { margin-bottom:12px; }
 label { display:block; margin-bottom:6px; font-weight:600; color:var(--color-text);} 
 select,input,textarea { width:100%; padding:10px; border-radius:8px; border:1px solid var(--color-border); background:var(--color-surface-2); color:var(--color-text); }
 
-/* Catalog */
+/* Catálogo */
 .catalog { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:18px; }
 .product-card { background:var(--color-surface); border-radius:10px; overflow:hidden; box-shadow:0 8px 30px rgba(var(--shadow-rgb),0.06); transition:transform 0.18s ease; }
 .product-card:hover { transform:translateY(-6px); }
@@ -41,7 +41,7 @@ select,input,textarea { width:100%; padding:10px; border-radius:8px; border:1px 
 .btn-cart:hover { background: var(--color-accent-600); }
 .cart-count { position:absolute; top:-8px; right:-8px; background: var(--color-danger); color: var(--color-surface); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; }
 
-/* Admin, cart, modals */
+/* Administración, carrito y modales */
 .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; padding:20px; overflow:auto; }
 .modal-content { background:var(--color-surface); margin:40px auto; padding:18px; border-radius:10px; max-width:700px; box-shadow:0 20px 60px rgba(var(--shadow-rgb),0.12); }
 .modal h2 { color:var(--color-primary); margin-bottom:12px; }
@@ -61,19 +61,19 @@ select,input,textarea { width:100%; padding:10px; border-radius:8px; border:1px 
 
 .empty-message { text-align:center; color:var(--color-muted); padding:24px; }
 
-/* Result count */
+/* Contador de resultados */
 .result-count { padding:8px 4px; font-size:0.9rem; color:var(--color-muted); margin-bottom:8px; }
 
-/* Active filters badges */
+/* Badges (etiquetas) de filtros activos */
 .active-filters { margin-bottom: 12px; display:flex; gap:8px; flex-wrap:wrap; }
 .active-filters .badge { background:var(--color-surface-2); color:var(--color-text); border:1px solid var(--color-border); padding:4px 8px; border-radius:999px; font-size:0.85rem; }
 .active-filters .badge .clear { margin-left:8px; color:var(--color-muted); cursor:pointer; }
 
-/* Toast */
+/* Notificaciones (toast) */
 .toast { position: fixed; right: 20px; bottom: 20px; background: rgba(0,0,0,0.8); color:#fff; padding:10px 16px; border-radius:8px; z-index:9999; box-shadow: 0 6px 20px rgba(var(--shadow-rgb), 0.25); }
 .toast.show { display:block; opacity:1; transition:opacity 0.2s ease; }
 
-/* Badge for size on product (small) */
+/* Badge para talla en producto (pequeño) */
 .product-meta .badge-mini { display:inline-block; background:var(--color-surface-2); color:var(--color-text); padding:2px 6px; border-radius:6px; font-size:0.75rem; margin-left:6px; }
 
 .mb-20 { margin-bottom:20px; }
@@ -90,4 +90,4 @@ select,input,textarea { width:100%; padding:10px; border-radius:8px; border:1px 
   .catalog { grid-template-columns:1fr; }
 }
 
-/* End of clean-styles.css */
+/* Fin de clean-styles.css */

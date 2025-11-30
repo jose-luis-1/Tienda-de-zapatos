@@ -52,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateSizeFilter() {
         const sizeSelect = document.getElementById('filterSize');
         if (!sizeSelect) return;
-        // gather unique sizes from products
+        // recolectar tallas únicas de los productos
         const sizesSet = new Set();
         products.forEach(p => { if (p.sizes && p.sizes.length) p.sizes.forEach(s => sizesSet.add(s)); });
         const sizes = Array.from(sizesSet).sort((a,b) => a - b);
 
-        // keep the 'all' option first
+        // dejar la opción 'all' al inicio
         const current = sizeSelect.value || 'all';
         sizeSelect.innerHTML = `<option value="all">Todas</option>` + sizes.map(s => `<option value="${s}">${s}</option>`).join('');
         if (sizes.includes(Number(current))) sizeSelect.value = current; else sizeSelect.value = 'all';
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const resultCountEl = document.getElementById('resultCount');
         if (filtered.length === 0) {
-            catalog.innerHTML = '<div class="empty-message">No hay productos que coincidan con los filtros.</div>';
+            catalog.innerHTML = '<div class="empty-message ">No hay productos que coincidan con los filtros.</div>';
             if (resultCountEl) resultCountEl.textContent = 'Mostrando 0 productos';
             updateActiveFiltersUI();
             return;
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSendButtonState();
     }
 
-    // Validate whatsapp number (strip to digits) — return true if length plausible
+    // Validar número de WhatsApp (quitar no dígitos) — devuelve true si la longitud es plausible
     function isValidWhatsAppNumber(number) {
         if (!number) return false;
         if (!/^[0-9]+$/.test(number)) return false;
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = !(isValidWhatsAppNumber(whatsappNumber) && cart.length > 0);
     }
 
-    // Show a short toast notification
+    // Mostrar una notificación corta (toast)
     function showToast(message, duration = 2000) {
         const toast = document.getElementById('toast');
         if (!toast) return;
